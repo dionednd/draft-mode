@@ -1,0 +1,114 @@
+; Draft Mode
+
+; make sure that you have the same configuration as the other player, if you're playing on netplay.
+
+[Draft]
+
+; necessary stuff
+files.sff = "external/mods/draftmode/draftmode.sff"
+files.air = "external/mods/draftmode/draftmode.air"
+files.snd = "external/mods/draftmode/draftmode.snd"
+
+; replaces the select screen music if you want it to.
+; set bgm.filename to -1 if you don't wanna replace the default select screen music.
+bgm.filename = -1
+bgm.volume = 100
+bgm.loop = 1
+bgm.loopstart = -1
+bgm.loopend = -1
+
+; allows you to pick characters that are already picked
+mirrormatch = 1
+
+; if set to 1, banning phase will go in turns. if 0, both can pick simultaneously.
+banphasedraft = 1
+
+; if set to 1, picking phase will go in turns. if 0, both can pick simultaneously.
+pickphasedraft = 0
+
+; automatically ban the previous winner's selection in the next match.
+; 0 = disabled
+; 1 = doesn't stack
+; 2 = banned characters will stack. no matter who's the winner, the winning selections will be banned from the entirety of the matches.
+; winner bans reset when you enter another gamemode or the roster doesn't have enough characters for the pick phase.
+winnerbanselection = 1
+loserbanselection = 0
+
+; select screen timer works best when banphasedraft and pickphasedraft is set to 1.
+; these options override the select info's timer parameters when in draft pick.
+; you can use this to have a timer for draft pick mode and have no timer in other gamemodes.
+timer.count = -1
+timer.framespercount = 60
+timer.displaytime = 10
+
+; ban count >= 0 is constant. ban count <= 1 is equal to the enemy's pick count. 
+; setting the bancount to 0 will make the teamside not able to ban.
+; setting the bancount to 0 for both teams will skip ban phase.
+; teamside1,teamside2
+bancount = -1,-1
+
+; all character reference numbers defined in autoban will be banned.
+; character reference numbers start from 0. the order is the same as the other of how you added the characters in your select.def
+; keep in mind that this also includes hidden characters and locked characters.
+; example: autoban = 0,2,4
+; bans first, third, fifth cells from left to right.
+; set to -1 to disable. will ignore randomselect but not hidden/locked cells.
+autoban = -1
+
+; 0 is disabled.
+; values >= 1 is the amount of characters that will be automatically banned randomly at the start of the character selection.
+randombans = 0
+
+; common stuff
+title.draftversus = "Draft Pick (Versus)"
+title.netplaydraftversus = "Draft Pick (Versus)"
+
+; >= 1 is enabled. <= 0 is disabled.
+; teamside1,teamside2
+teammode.single = 1,1
+teammode.simul = 1,1
+teammode.tag = 1,1
+teammode.turns = 1,1
+
+; round time
+; if -1 or lower, use gameOption('Options.Time')
+roundtime = -1
+
+; stage select
+; setting this to 0 will disable stage select.
+stageselect = 1
+
+; cell overlays
+overlay.banned.anim = 0
+overlay.picked.anim = 1
+overlay.offset = 0,0
+overlay.scale = 1,1
+
+; sounds
+; set sounds to 0 if you don't want the extra sfx.
+sounds = 1
+sound.ban   = 0,0
+sound.pick  = 0,1
+
+; replaces px.select.snd during the ban phase.
+p1.ban.snd = -1, 0
+p2.ban.snd = -1, 0
+
+; announcer
+; set announcer to 0 if you don't want the announcer.
+announcer = 1
+announce.ban = 1,0
+announce.pick = 1,1
+announce.regular = 1,2
+
+; phase text
+phase.text.font = 4,0,0
+phase.text.ban = "BAN PHASE"
+phase.text.pick = "PICK PHASE"
+phase.text.regular = "REGULATION"
+phase.text.color1 = 128,128,255
+phase.text.color2 = 255,128,128
+phase.text.regularcolor = 255,255,255
+phase.text.offset = 640,88
+phase.text.layerno = 2
+phase.text.scale = 0.75,0.75
