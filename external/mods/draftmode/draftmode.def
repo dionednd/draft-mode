@@ -33,6 +33,7 @@ pickphasedraft = 0
 ; winner bans reset when you enter another gamemode or the roster doesn't have enough characters for the pick phase.
 winnerbanselection = 1
 loserbanselection = 0
+drawbanselection = 0
 
 ; select screen timer works best when banphasedraft and pickphasedraft is set to 1.
 ; these options override the select info's timer parameters when in draft pick.
