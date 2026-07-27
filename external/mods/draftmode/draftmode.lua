@@ -1,4 +1,4 @@
--- Draft Mode for IKEMEN GO v0.0.1
+-- Draft Mode for IKEMEN GO v0.0.2
 -- by dionednd
 
 draft = {}
@@ -51,6 +51,10 @@ local winner = {
 	persistentBannedRefs = {}
 }
 local loser = {
+	persistentBannedRefs = {}
+}
+
+local draw = {
 	persistentBannedRefs = {}
 }
 
@@ -555,6 +559,7 @@ local function beginDraft()
 	if (poolSize(buildPool()) - (_bans + _picks)) < 0 then
 		winner.persistentBannedRefs = {}
 		loser.persistentBannedRefs = {}
+		draw.persistentBannedRefs = {}
 		start.escFlag = true
 		return false
 	end
@@ -622,6 +627,7 @@ hook.add("start.f_selectReset", "draftmode.reset", function()
 	if not draft.gameModes[gameMode()] then
 		winner.persistentBannedRefs = {}
 		loser.persistentBannedRefs = {}
+		draw.persistentBannedRefs = {}
 		motif.select_info.timer.count = original_timer.count
 		motif.select_info.timer.framespercount = original_timer.framespercount
 		motif.select_info.timer.displaytime = original_timer.displaytime
@@ -649,6 +655,14 @@ hook.add("start.f_selectReset", "draftmode.reset", function()
 
 		if motif.draft.loserbanselection > 0 then
 			for ref in pairs(loser.persistentBannedRefs) do
+				bannedRefs[ref] = true
+				t_reservedChars[1][ref] = true
+				t_reservedChars[2][ref] = true
+			end
+		end
+
+		if motif.draft.drawbanselection > 0 then
+			for ref in pairs(draw.persistentBannedRefs) do
 				bannedRefs[ref] = true
 				t_reservedChars[1][ref] = true
 				t_reservedChars[2][ref] = true
@@ -926,7 +940,8 @@ hook.add("game.victory_init", "draftmode.result", function()
 	local cfg = motif.draft
 	local wmode = cfg.winnerbanselection
 	local lmode = cfg.loserbanselection
-	if draft.gameModes[gameMode()] and (wmode > 0 or lmode > 0) then
+	local dmode = cfg.drawbanselection
+	if draft.gameModes[gameMode()] and (wmode > 0 or lmode > 0 or dmode > 0) then
 		if getWinnerTeam() > 0 then
 			if wmode > 0 then
 				if wmode == 1 then
@@ -935,12 +950,25 @@ hook.add("game.victory_init", "draftmode.result", function()
 				for _, v in ipairs(start.p[getWinnerTeam()].t_selected) do
 					winner.persistentBannedRefs[v.ref] = true
 				end
-			elseif lmode > 0 then
+			end
+			if lmode > 0 then
 				if lmode == 1 then
 					loser.persistentBannedRefs = {}
 				end
 				for _, v in ipairs(start.p[otherSide(getWinnerTeam())].t_selected) do
 					loser.persistentBannedRefs[v.ref] = true
+				end
+			end
+		else
+			if dmode > 0 then
+				if dmode == 1 then
+					draw.persistentBannedRefs = {}
+				end
+				for _, v in ipairs(start.p[1].t_selected) do
+					draw.persistentBannedRefs[v.ref] = true
+				end
+				for _, v in ipairs(start.p[2].t_selected) do
+					draw.persistentBannedRefs[v.ref] = true
 				end
 			end
 		end
