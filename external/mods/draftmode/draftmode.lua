@@ -1,4 +1,4 @@
--- Draft Mode for IKEMEN GO v0.0.2
+-- Draft Mode for IKEMEN GO v0.0.2a
 -- by dionednd
 
 draft = {}
@@ -936,18 +936,21 @@ main.t_itemname.netplaydraftversus = function(t, item)
 	return start.f_selectMode
 end
 
-hook.add("game.victory_init", "draftmode.result", function()
+local original_f_game = start.f_game
+function start.f_game(common)
+	local game_winner = original_f_game(common)
+
 	local cfg = motif.draft
 	local wmode = cfg.winnerbanselection
 	local lmode = cfg.loserbanselection
 	local dmode = cfg.drawbanselection
 	if draft.gameModes[gameMode()] and (wmode > 0 or lmode > 0 or dmode > 0) then
-		if getWinnerTeam() > 0 then
+		if game_winner > 0 then
 			if wmode > 0 then
 				if wmode == 1 then
 					winner.persistentBannedRefs = {}
 				end
-				for _, v in ipairs(start.p[getWinnerTeam()].t_selected) do
+				for _, v in ipairs(start.p[game_winner].t_selected) do
 					winner.persistentBannedRefs[v.ref] = true
 				end
 			end
@@ -955,7 +958,7 @@ hook.add("game.victory_init", "draftmode.result", function()
 				if lmode == 1 then
 					loser.persistentBannedRefs = {}
 				end
-				for _, v in ipairs(start.p[otherSide(getWinnerTeam())].t_selected) do
+				for _, v in ipairs(start.p[otherSide(game_winner)].t_selected) do
 					loser.persistentBannedRefs[v.ref] = true
 				end
 			end
@@ -973,4 +976,5 @@ hook.add("game.victory_init", "draftmode.result", function()
 			end
 		end
 	end
-end)
+	return game_winner
+end
